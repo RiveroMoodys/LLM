@@ -1,0 +1,26 @@
+FROM python:3.10 as builder
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc \
+    libpq-dev
+
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+COPY requirements-research.txt /app
+
+WORKDIR /app
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements-research.txt
+
+FROM python:3.10-slim-bullseye
+
+COPY --from=builder /opt/venv /opt/venv
+COPY ./src/dashboard /app
+WORKDIR /app
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+CMD ["jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --notebook-dir=/opt/app/data --allow-root --NotebookApp.token='' --NotebookApp.password=''"]

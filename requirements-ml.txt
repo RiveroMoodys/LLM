@@ -1,0 +1,10 @@
+numpy==1.24.3
+scikit-learn==1.2.2
+statsmodels==0.14.0
+transformers==4.29.2
+sentencepiece==0.1.99
+torch==2.0.1
+xformers==0.0.19
+nltk==3.8.1
+spacy==3.5.3
+prophet==1.1.2
